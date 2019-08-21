@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -70,6 +71,7 @@ class ProductController extends AbstractController
         ]);
      }
 
+     
      /**
      * @Route ("/product/{page}", requirements={"page" = "\d+"}, name="product_list")
      * 
@@ -99,6 +101,7 @@ class ProductController extends AbstractController
         ]);
     }
 
+    
     /**
      * @Route ("/product/{slug}", name="product_slug")
      * 
@@ -130,6 +133,19 @@ class ProductController extends AbstractController
     {
         // On renvoie le tableau des produits sous forme de JSON
         return $this->json($this->products);
+    }
+
+
+    public function create(Request $request)
+    {
+    // $this->addFlash() est un raccourci pour
+    // $request->getSession()->getFlashBag()->add()
+    $this->addFlash(
+        'notice',
+        'Le produit a bien été créé.'
+    );
+
+    return $this->redirectToRoute('product_list');
     }
 }
 
