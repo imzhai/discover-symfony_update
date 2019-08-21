@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <h3>le produit : </h3>
+    {# product.name équivaut à $product['name'] #}
+        <p> Le nom du produit : {{product.name}}</p> 
+        <p> Le prix du produit : {{product.price}}</p> 
+
+ 
+{% endblock %}
