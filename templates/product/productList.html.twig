@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
- <h3>les produits sont : </h3>
+ <h3>les produits en page {{current_page}} sont : </h3>
     <div class="container">
         <table>
             <thead>
@@ -26,4 +26,6 @@
             </tbody>
         </table>
     </div>
+
+    <p>Page {{current_page}} sur {{max_pages}} </p>
 {% endblock %}

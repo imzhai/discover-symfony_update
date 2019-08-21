@@ -43,7 +43,11 @@ class ProductController extends AbstractController
 
             ['name' => 'iPhone X', 'slug' => 'iphone-x', 'description' => 'Un iPhone de 2017','price' => '999'],
             ['name' =>  'iPhone XR', 'slug' => 'iphone-xr', 'description' => 'Un iPhone de 2018','price' => '1099'],
-            ['name' => 'iPhone XS', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199']
+            ['name' => 'iPhone XS', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XW', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XX', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XY', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199']
+
 
         ];
     }
@@ -67,20 +71,35 @@ class ProductController extends AbstractController
      }
 
      /**
-     * @Route ("/product/", name="product_list")
+     * @Route ("/product/{page}", requirements={"page" = "\d+"}, name="product_list")
      * 
-     * Liste des produits dans un tableau html
+     * Liste des produits dans un tableau html // Réaliser pagination 
      */
 
-    public function productList()
+    public function productList($page = 1)
     { 
+        $products = $this->products;
+        // array_slice( début, nombre d'elements pris en compte)
+        $products = array_slice($products, ($page - 1) * 2, 2);
+        // Calculer le nombre de page maximal. On compte les occurrences du tableau grâce a count() puis on arrondit
+        // Ceil permet d'arrondir au supérieur
+        $maxPages = ceil(count($this->products) / 2);
+
+        // Si la page courante est supérieure au nombre maximum de pages
+        // On renvoit un 404
+        if ($page > $maxPages)
+        {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('product/productList.html.twig',[
-            'products' =>$this->products,
-          
+            'products' => $products,
+            'current_page' => $page,
+            'max_pages' => $maxPages
         ]);
     }
 
-         /**
+    /**
      * @Route ("/product/{slug}", name="product_slug")
      * 
      * renvoie un produit avec ses informations au format HTML, renvoie une 404 si le produit n'existe pas.
