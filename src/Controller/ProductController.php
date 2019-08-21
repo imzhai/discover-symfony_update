@@ -103,6 +103,15 @@ class ProductController extends AbstractController
 
         throw $this->createNotFoundException('Ce produit n\'existe pas');
     }
+
+    /** 
+     * @Route("/product.json")
+    */
+    public function api()
+    {
+        // On renvoie le tableau des produits sous forme de JSON
+        return $this->json($this->products);
+    }
 }
 
 
