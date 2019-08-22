@@ -2,14 +2,14 @@
 
 {% block body %}
     <div class="container mt-5">
-        <form>
-            <div class="form-group">
-                {{ form_start(form) }}
+        
+           
+                {{ form_start(form, {'attr': {'novalidate' : 'novalidate'}}) }}
                     {{ form_widget(form) }}
 
                     <button Class="btn btn-secondary">Ajouter le produit</button>
                 {{ form_end(form) }}
-            </div>
-        </form>
+            
+        
     </div>
 {% endblock %}

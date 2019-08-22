@@ -3,9 +3,19 @@
 // src/Entity/Product.php
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Product
 {
-	protected $name;
+    /** 
+     * @Assert\NotBlank()
+     */
+    protected $name;
+    
+    /** 
+     * @Assert\NotBlank()
+     * @Assert\Length(min=10) 
+     */
 	protected $description;
 
 	public function getName(): ?string
