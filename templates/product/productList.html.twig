@@ -1,29 +1,54 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
- <h3>les produits sont : </h3>
+ <h1 class="text-center mb-5">Nos produits </h1>
     <div class="container">
-        <table>
-            <thead>
+        <table class="table text-align">
+            <thead class="thead-dark text-align">
                 <tr>
+                    <th scope="col">#</th>
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Description</th>
                     <th>Prix</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
         
             <tbody>
-                    {% for product in products %}
+                    {% for key, product in products %}
                         <tr>
+                            <th scope="row">{{key}}</th>
                             <td>{{product.name}}</td> 
                             <td>{{product.slug}}</td>
                             <td>{{product.description}}</td>
                             <td>{{product.price}}</td>
+                            {# le deuxieme parametre de path permet de définir les paramètre obligatoires de la route. 
+                            Ici, on génère l'url /product/iphone-x si product.slug = 'iphone-x' #}
+                            <td><a href="{{ path('product_slug', {'slug' : product.slug} )}}" class="btn btn-secondary">Voir le produit</a></td>
                         </tr>
                     {% endfor %}
-
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if current_page != 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ path('product_list', {'page' : current_page - 1}) }}">Previous</a></li>
+                {% endif %}
+                
+                    {% for i in 1..max_pages %}
+                        <li class="page-item {{ (current_page == i) ? 'active' : '' }}">
+                        <a class="page-link" href="{{ path('product_list', {'page' : i}) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+
+                {% if current_page != max_pages  %}
+                    <li class="page-item">
+                        <a class="page-link" href=" {{ path('product_list', {'page' : current_page + 1}) }} ">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>    
     </div>
 {% endblock %}

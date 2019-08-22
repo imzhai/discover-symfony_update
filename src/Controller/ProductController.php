@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -43,7 +44,11 @@ class ProductController extends AbstractController
 
             ['name' => 'iPhone X', 'slug' => 'iphone-x', 'description' => 'Un iPhone de 2017','price' => '999'],
             ['name' =>  'iPhone XR', 'slug' => 'iphone-xr', 'description' => 'Un iPhone de 2018','price' => '1099'],
-            ['name' => 'iPhone XS', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199']
+            ['name' => 'iPhone XS', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XW', 'slug' => 'iphone-xw', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XX', 'slug' => 'iphone-xx', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XY', 'slug' => 'iphone-xy', 'description' => 'Un iPhone de 2018','price' => '1199']
+
 
         ];
     }
@@ -66,21 +71,38 @@ class ProductController extends AbstractController
         ]);
      }
 
+     
      /**
-     * @Route ("/product/", name="product_list")
+     * @Route ("/product/{page}", requirements={"page" = "\d+"}, name="product_list")
      * 
-     * Liste des produits dans un tableau html
+     * Liste des produits dans un tableau html // Réaliser pagination 
      */
 
-    public function productList()
+    public function productList($page = 1)
     { 
+        $products = $this->products;
+        // array_slice( début, nombre d'elements pris en compte)
+        $products = array_slice($products, ($page - 1) * 2, 2);
+        // Calculer le nombre de page maximal. On compte les occurrences du tableau grâce a count() puis on arrondit
+        // Ceil permet d'arrondir au supérieur
+        $maxPages = ceil(count($this->products) / 2);
+
+        // Si la page courante est supérieure au nombre maximum de pages
+        // On renvoit un 404
+        if ($page > $maxPages)
+        {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('product/productList.html.twig',[
-            'products' =>$this->products,
-          
+            'products' => $products,
+            'current_page' => $page,
+            'max_pages' => $maxPages
         ]);
     }
 
-         /**
+    
+    /**
      * @Route ("/product/{slug}", name="product_slug")
      * 
      * renvoie un produit avec ses informations au format HTML, renvoie une 404 si le produit n'existe pas.
@@ -111,6 +133,38 @@ class ProductController extends AbstractController
     {
         // On renvoie le tableau des produits sous forme de JSON
         return $this->json($this->products);
+    }
+
+
+    /** 
+     * @Route("/product/order/{slug}")
+    */
+    public function order($slug)
+    {
+        // $alphabet = ['A', 'B', 'C'];
+        // //$newAlphabet = ['A']
+        // $newAlphabet = array_filter($alphabet, function($lettre) {return $lettre === 'A';});
+
+        //Chercher le produit concerné dans notre tableau
+        // Le terme "use" du callback permet d'utiliser une variable définie en dehors de celui-ci
+        $product = array_filter($this->products, function ($product) use ($slug)
+        {
+            // cette fonction est appelée sur chaque élément du tableau.
+            // On renvoie truc si on veit garder l'élément dans le filtre qu'on applique
+            return $product['slug'] === $slug;
+        });
+        
+        // Réinitialise les index du tableau filtré
+        $product = array_values($product);
+        // On ne prends qu'un seul produit
+        $product = $product[0];
+
+
+
+        $this->addFlash('success',"Nous avons bien pris en compte votre commande de l' ".$product['name']);
+
+        // APrès la commande, on redirige vers la liste des produits.
+        return $this->redirectToRoute('product_list');
     }
 }
 
