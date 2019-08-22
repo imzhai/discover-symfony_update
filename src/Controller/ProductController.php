@@ -45,9 +45,9 @@ class ProductController extends AbstractController
             ['name' => 'iPhone X', 'slug' => 'iphone-x', 'description' => 'Un iPhone de 2017','price' => '999'],
             ['name' =>  'iPhone XR', 'slug' => 'iphone-xr', 'description' => 'Un iPhone de 2018','price' => '1099'],
             ['name' => 'iPhone XS', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
-            ['name' => 'iPhone XW', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
-            ['name' => 'iPhone XX', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199'],
-            ['name' => 'iPhone XY', 'slug' => 'iphone-xs', 'description' => 'Un iPhone de 2018','price' => '1199']
+            ['name' => 'iPhone XW', 'slug' => 'iphone-xw', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XX', 'slug' => 'iphone-xx', 'description' => 'Un iPhone de 2018','price' => '1199'],
+            ['name' => 'iPhone XY', 'slug' => 'iphone-xy', 'description' => 'Un iPhone de 2018','price' => '1199']
 
 
         ];
@@ -136,16 +136,35 @@ class ProductController extends AbstractController
     }
 
 
-    public function create(Request $request)
+    /** 
+     * @Route("/product/order/{slug}")
+    */
+    public function order($slug)
     {
-    // $this->addFlash() est un raccourci pour
-    // $request->getSession()->getFlashBag()->add()
-    $this->addFlash(
-        'notice',
-        'Le produit a bien été créé.'
-    );
+        // $alphabet = ['A', 'B', 'C'];
+        // //$newAlphabet = ['A']
+        // $newAlphabet = array_filter($alphabet, function($lettre) {return $lettre === 'A';});
 
-    return $this->redirectToRoute('product_list');
+        //Chercher le produit concerné dans notre tableau
+        // Le terme "use" du callback permet d'utiliser une variable définie en dehors de celui-ci
+        $product = array_filter($this->products, function ($product) use ($slug)
+        {
+            // cette fonction est appelée sur chaque élément du tableau.
+            // On renvoie truc si on veit garder l'élément dans le filtre qu'on applique
+            return $product['slug'] === $slug;
+        });
+        
+        // Réinitialise les index du tableau filtré
+        $product = array_values($product);
+        // On ne prends qu'un seul produit
+        $product = $product[0];
+
+
+
+        $this->addFlash('success',' Nous avons bien pris en compte votre commande de '.$product['name']);
+
+        // APrès la commande, on redirige vers la liste des produits.
+        return $this->redirectToRoute('product_list');
     }
 }
 

@@ -23,7 +23,9 @@
                             <td>{{product.slug}}</td>
                             <td>{{product.description}}</td>
                             <td>{{product.price}}</td>
-                            <td><a href="{{ path('product_slug', {'slug' : product.slug })}}" class="btn btn-secondary">Voir le produit</a></td>
+                            {# le deuxieme parametre de path permet de définir les paramètre obligatoires de la route. 
+                            Ici, on génère l'url /product/iphone-x si product.slug = 'iphone-x' #}
+                            <td><a href="{{ path('product_slug', {'slug' : product.slug} )}}" class="btn btn-secondary">Voir le produit</a></td>
                         </tr>
                     {% endfor %}
             </tbody>
