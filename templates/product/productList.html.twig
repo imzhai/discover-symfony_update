@@ -3,8 +3,8 @@
 {% block body %}
  <h1 class="text-center mb-5">Nos produits </h1>
     <div class="container">
-        <table class="table">
-            <thead class="thead-dark">
+        <table class="table text-align">
+            <thead class="thead-dark text-align">
                 <tr>
                     <th scope="col">#</th>
                     <th>Name</th>
@@ -16,14 +16,14 @@
             </thead>
         
             <tbody>
-                    {% for product in products %}
+                    {% for key, product in products %}
                         <tr>
-                            <th scope="row">1</th>
+                            <th scope="row">{{key}}</th>
                             <td>{{product.name}}</td> 
                             <td>{{product.slug}}</td>
                             <td>{{product.description}}</td>
                             <td>{{product.price}}</td>
-                            <td><a href="{{ path('product_random')}}" class="btn btn-secondary">Voir le produit</a></td>
+                            <td><a href="{{ path('product_slug', {'slug' : product.slug })}}" class="btn btn-secondary">Voir le produit</a></td>
                         </tr>
                     {% endfor %}
             </tbody>
