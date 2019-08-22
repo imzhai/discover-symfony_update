@@ -161,7 +161,7 @@ class ProductController extends AbstractController
 
 
 
-        $this->addFlash('success',' Nous avons bien pris en compte votre commande de '.$product['name']);
+        $this->addFlash('success',"Nous avons bien pris en compte votre commande de l' ".$product['name']);
 
         // APrès la commande, on redirige vers la liste des produits.
         return $this->redirectToRoute('product_list');
