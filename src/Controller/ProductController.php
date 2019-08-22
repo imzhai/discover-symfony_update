@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ProductController extends AbstractController
 {
@@ -51,6 +52,37 @@ class ProductController extends AbstractController
 
 
         ];
+    }
+
+    /** 
+    * @Route("/product/create")
+    */
+
+    public function create(Request $request)
+    {
+        // On crée un produit "vierge
+        $product = new Product();
+        dump($product);
+        // Créer un formulaire dans le contrôleur
+        $form = $this->createFormBuilder()
+            ->add('name')
+            ->add('description', TextareaType::class )
+            ->getForm();
+
+        // Traitement du formulaire
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() renvoie les données soumises
+            dump($form->getData());
+            dump($product);
+        }
+
+
+
+        return $this->render('product/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -166,6 +198,7 @@ class ProductController extends AbstractController
         // APrès la commande, on redirige vers la liste des produits.
         return $this->redirectToRoute('product_list');
     }
+
 }
 
 

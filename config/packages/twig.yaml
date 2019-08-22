@@ -2,3 +2,6 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    # On configure les formulaires avec Bootstrap
+    form_themes :
+        - 'bootstrap_4_layout.html.twig'
