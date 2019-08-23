@@ -17,7 +17,7 @@ class ContactController extends AbstractController
     /** 
      * @Route ("/contact")
     */
-    public function contact(Request $request)
+    public function contact(Request $request, \Swift_Mailer $mailer)
     {
         $contact = new Contact(); // Crée le contact vide
 
@@ -30,44 +30,54 @@ class ContactController extends AbstractController
             // $contact->getName(); Permet de récupérer l'name saisi dans le formulaire
             // $contact->getMessage(); Permet de récupérer l'Message saisi dans le formulaire
             $this->addFlash('success',"Votre formulaire est bien envoyé :" .$contact->getEmail()); // Ajout du message Flash avec l'email vers lequel il a été envoyé
+
+            $message = (new \Swift_Message('Hello coco !')) // permet d'envoyer un mail. A mettre dans la condition de validation
+                ->setFrom($contact->getEmail())
+                ->setTo('jue@gmail.com')
+                ->setBody('Salut les gens')
+            ;
+            $mailer->send($message);
+
         }
 
         // La redirection évite de ré-exécuter le formulaire
         return $this->render('contact/contact.html.twig', [
             'form' => $form->createView(),
         ]);
+
+
     }
 
+    // DOCUMENTATION DE BASE DE SWIFT MAILER
+    // public function index($name, \Swift_Mailer $mailer)
+    // {
+    //     $message = (new \Swift_Message('Hello Email'))
+    //         ->setFrom('send@example.com')
+    //         ->setTo('recipient@example.com')
+    //         ->setBody(
+    //             $this->renderView(
+    //                 // templates/emails/registration.html.twig
+    //                 'emails/registration.html.twig',
+    //                 ['name' => $name]
+    //             ),
+    //             'text/html'
+    //         )
 
-    public function index($name, \Swift_Mailer $mailer)
-    {
-        $message = (new \Swift_Message('Hello Email'))
-            ->setFrom('send@example.com')
-            ->setTo('recipient@example.com')
-            ->setBody(
-                $this->renderView(
-                    // templates/emails/registration.html.twig
-                    'emails/registration.html.twig',
-                    ['name' => $name]
-                ),
-                'text/html'
-            )
+    //         // you can remove the following code if you don't define a text version for your emails
+    //         ->addPart(
+    //             $this->renderView(
+    //                 // templates/emails/registration.txt.twig
+    //                 'emails/registration.txt.twig',
+    //                 ['name' => $name]
+    //             ),
+    //             'text/plain'
+    //         )
+    //     ;
 
-            // you can remove the following code if you don't define a text version for your emails
-            ->addPart(
-                $this->renderView(
-                    // templates/emails/registration.txt.twig
-                    'emails/registration.txt.twig',
-                    ['name' => $name]
-                ),
-                'text/plain'
-            )
-        ;
+    //     $mailer->send($message);
 
-        $mailer->send($message);
-
-        return $this->render('contact/contact.html.twig');
-    }
+    //     return $this->render('contact/contact.html.twig');
+    // }
 
   
 
