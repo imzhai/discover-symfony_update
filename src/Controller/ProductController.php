@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,10 +66,10 @@ class ProductController extends AbstractController
         $product = new Product();
         dump($product);
         // Créer un formulaire dans le contrôleur
-        $form = $this->createFormBuilder($product)
-            ->add('name')
-            ->add('description', TextareaType::class )
-            ->getForm();
+        $form = $this->createForm(ProductType::class, $product);
+            // ->add('name')
+            // ->add('description', TextareaType::class )
+            // ->getForm();
 
         // Traitement du formulaire
         $form->handleRequest($request);

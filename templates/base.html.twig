@@ -19,12 +19,16 @@
                      {% set current_route = app.request.attributes.get('_route') %}
                     <div class="navbar-collapse collapse" id="menu" style="">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item" >
-                                <a class="nav-link" href="#">Accueil</a>
-                            </li>
                             <li class="nav-item  
                             {% if current_route == 'product_list' %}  active  {% endif %} "> 
                                 <a class="nav-link" href="{{ path('product_list')}}">Produits</a>
+                            </li>
+                            <li class="nav-item  
+                            {% if current_route == 'app_product_create' %}  active  {% endif %} "> 
+                                <a class="nav-link" href="{{ path('app_product_create')}}">Créer Produits</a>
+                            </li>
+                             <li class="nav-item {% if current_route == 'product_list' %}  active  {% endif %}" >
+                                <a class="nav-link" href="{{ path('app_contact_contact')}}">Contact</a>
                             </li>
                         </ul>
                     </div>

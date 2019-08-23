@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+     <div class="container mt-5">
+        
+           
+                {{ form_start(form, {'attr': {'novalidate' : 'novalidate'}}) }}
+                   {{ form_widget(form) }}  {#  Le widget permet de générer les champs #}
+
+                    <button Class="btn btn-secondary">Envoyer le formulaire</button>
+                {{ form_end(form) }}
+            
+        
+    </div>
+{% endblock %}
